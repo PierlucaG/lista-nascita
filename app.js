@@ -31,6 +31,13 @@
   function safeUrl(u) { return /^https:\/\//i.test(String(u || '')) ? u : ''; }
   function lsGet(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
   function lsSet(k, v) { try { localStorage.setItem(k, v); } catch (e) { /* ignore */ } }
+  // Baby's name comes ONLY from the API (present only after the reveal). Shown with a capital first letter.
+  function babyName() {
+    var c = state.data && state.data.config;
+    var n = c && typeof c.prenom_bebe === 'string' ? c.prenom_bebe.trim() : '';
+    if (!n || n.length > 40 || /[<>]/.test(n)) return '';
+    return n.charAt(0).toLocaleUpperCase() + n.slice(1).toLocaleLowerCase();
+  }
   function pick(p, base) { return p[base + '_' + state.lang] || p[base + '_fr'] || ''; }
 
   function api(method, payload) {
@@ -65,11 +72,13 @@
   function applyStatic() {
     var L = window.I18N[state.lang];
     document.documentElement.lang = L.htmlLang;
-    document.title = L.pageTitle;
-    $('initials').textContent = INITIALS;
-    $('heroTitle').textContent = L.heroTitle;
     var cfg = state.data && state.data.config;
-    $('heroMessage').textContent = cfg ? (cfg['message_' + state.lang] || '') : '';
+    var baby = babyName();
+    document.title = baby ? fmt(L.pageTitleNamed, { prenom: baby }) : L.pageTitle;
+    $('initials').textContent = INITIALS;
+    $('heroTitle').textContent = baby ? fmt(L.heroTitleNamed, { prenom: baby }) : L.heroTitle;
+    var custom = cfg ? (cfg['message_' + state.lang] || '') : '';
+    $('heroMessage').textContent = baby ? fmt(L.introNamed, { prenom: baby }) : custom;
     ['how1', 'how2', 'how3'].forEach(function (k) { $(k).textContent = L[k]; });
     $('howTitle').textContent = L.howTitle;
     $('onlyAvailLabel').textContent = L.onlyAvailable;
@@ -259,7 +268,8 @@
   }
 
   function showDone(p, name, r) {
-    var msg = el('p', { text: t('thanksText') });
+    var baby = babyName();
+    var msg = el('p', { text: baby ? fmt(t('thanksTextNamed'), { prenom: baby }) : t('thanksText') });
     var shop = safeUrl(p.url);
     var tick = el('div', { class: 'tick', 'aria-hidden': 'true' });
     tick.innerHTML = '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
