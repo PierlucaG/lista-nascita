@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#F7F3EE">
+  <title>Liste de naissance</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500&display=swap">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-in">
+      <span class="initials" id="initials" aria-hidden="true"></span>
+      <div class="lang" role="group" id="langSwitch">
+        <button type="button" data-lang="fr">FR</button>
+        <button type="button" data-lang="it">IT</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="hero">
+      <h1 id="heroTitle"></h1>
+      <p id="heroMessage" class="hero-msg"></p>
+    </section>
+
+    <section class="how" aria-labelledby="howTitle">
+      <h2 id="howTitle"></h2>
+      <ol>
+        <li><span class="num">1</span><span id="how1"></span></li>
+        <li><span class="num">2</span><span id="how2"></span></li>
+        <li><span class="num">3</span><span id="how3"></span></li>
+      </ol>
+    </section>
+
+    <div id="status" class="status" role="status" aria-live="polite"></div>
+
+    <div id="controls" hidden>
+      <div class="chips" id="chips" role="tablist"></div>
+      <div class="counter-row">
+        <span id="counter" class="counter"></span>
+        <label class="check"><input type="checkbox" id="onlyAvail"><span id="onlyAvailLabel"></span></label>
+      </div>
+    </div>
+
+    <div id="grid" class="grid"></div>
+  </main>
+
+  <div id="overlay" class="overlay" hidden>
+    <div class="sheet" id="sheet" role="dialog" aria-modal="true"></div>
+  </div>
+
+  <script src="i18n.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
